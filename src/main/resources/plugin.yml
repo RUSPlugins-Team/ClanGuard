@@ -1,0 +1,9 @@
+name: ClanGuard
+main: en.clangurd.ClanGuard
+version: 1.0.0
+api: ["1.0.0"]
+author: RUSPlugins-Team
+website: https://github.com/RUSPlugins-Team
+description: Advanced clan management and protection plugin for Nukkit
+softdepend:
+  - EconomyAPI
