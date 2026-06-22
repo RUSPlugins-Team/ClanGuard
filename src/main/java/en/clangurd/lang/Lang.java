@@ -39,6 +39,12 @@ public final class Lang {
         EN.put("error_economy_disabled", "\u00A7cEconomy integration is disabled! EconomyAPI not found.");
         EN.put("error_no_members_kick", "\u00A7cThere are no members to kick!");
         EN.put("error_cannot_invite_self", "\u00A7cYou cannot invite yourself!");
+        EN.put("error_home_name_invalid", "\u00A7cInvalid home point name! 1-6 symbols, starts with uppercase, letters and digits only.");
+        EN.put("error_home_exists", "\u00A7cThis home point already exists!");
+        EN.put("error_no_home_points", "\u00A7cThere are no clan home points yet!");
+        EN.put("error_home_not_found", "\u00A7cHome point not found.");
+        EN.put("error_teleport_cancelled_moved", "\u00A7cTeleportation cancelled because you moved.");
+        EN.put("error_transfer_target_invalid", "\u00A7cNo valid member found for ownership transfer.");
         EN.put("error_failed", "\u00A7cOperation failed. Please try again.");
         EN.put("error_console_only", "This command can only be used in-game.");
 
@@ -54,6 +60,8 @@ public final class Lang {
         EN.put("success_delete_cancelled", "\u00A7aClan deletion cancelled.");
         EN.put("success_deposit", "\u00A7aYou deposited \u00A7e%amount% coins\u00A7a to the treasury! (Commission: \u00A7c%commission%\u00A7a)");
         EN.put("success_withdraw", "\u00A7aYou withdrew \u00A7e%amount% coins\u00A7a from the treasury!");
+        EN.put("success_home_created", "\u00A7aClan home point \u00A7e%home%\u00A7a created for clan [\u00A7b%tag%\u00A7a].");
+        EN.put("success_transfer_ownership", "\u00A7aClan ownership has been transferred to \u00A7e%player%\u00A7a.");
 
         EN.put("broadcast_clan_created", "\u00A7aPlayer \u00A7b%player% \u00A7acreated the clan [\u00A7b%tag%\u00A7a], congratulations!");
         EN.put("broadcast_member_joined", "\u00A7aA new member \u00A7b%player% \u00A7ahas joined our clan, congratulations!");
@@ -61,11 +69,15 @@ public final class Lang {
         EN.put("broadcast_clan_deleted", "\u00A7cClan [\u00A7b%tag%\u00A7c] has been disbanded.");
         EN.put("broadcast_deposit", "\u00A7aMember \u00A7b%player% \u00A7adonated \u00A7e%amount% coins\u00A7a to the clan treasury!");
         EN.put("broadcast_withdraw", "\u00A7cClan member \u00A7b%player%\u00A7c took \u00A7e%amount% coins\u00A7c from the clan treasury.");
+        EN.put("broadcast_home_created", "\u00A7aA new clan home point \u00A7e%home%\u00A7a for [\u00A7b%tag%\u00A7a] has been created.");
+        EN.put("broadcast_ownership_transferred", "\u00A7eClan ownership has been transferred from \u00A7b%from% \u00A7eto \u00A7b%to%\u00A7e.");
 
         EN.put("notify_kicked", "\u00A7cYou have been kicked from the clan!");
         EN.put("notify_clan_deleted", "\u00A7cYour clan [\u00A7b%tag%\u00A7c] has been deleted by the leader.");
         EN.put("notify_invite_declined", "\u00A7e%player% \u00A7cdeclined your invitation.");
         EN.put("notify_processing", "\u00A7eProcessing... You will be notified when complete.");
+        EN.put("notify_teleport_started", "\u00A7eTeleportation sequence started.");
+        EN.put("notify_you_are_new_leader", "\u00A7aYou are now the clan leader of [\u00A7b%tag%\u00A7a].");
 
         EN.put("gui_main_title", "Clan Panel");
         EN.put("gui_main_content", "IMPORTANT INFORMATION!\n\nCreating a clan is FREE.\nHowever, when depositing funds into the clan treasury,\na commission of 1%% to 10%% will be charged from the deposit amount.");
@@ -76,6 +88,9 @@ public final class Lang {
         EN.put("gui_btn_deposit", "Deposit to Treasury");
         EN.put("gui_btn_withdraw", "Withdraw from Treasury");
         EN.put("gui_btn_chat", "Clan Chat");
+        EN.put("gui_btn_set_home", "Set Home Point");
+        EN.put("gui_btn_tp_home", "Teleport to Point");
+        EN.put("gui_btn_transfer_owner", "Transfer Ownership");
         EN.put("gui_btn_rename", "Change Name");
         EN.put("gui_btn_description", "Add Description");
         EN.put("gui_btn_delete", "Delete Clan");
@@ -86,6 +101,8 @@ public final class Lang {
         EN.put("gui_btn_cancel", "Cancel");
         EN.put("gui_btn_delete_confirm", "\u00A7cDelete Clan");
         EN.put("gui_btn_custom_amount", "\u00A7aCustom Amount");
+        EN.put("gui_btn_teleport", "Teleport");
+        EN.put("gui_btn_transfer", "Transfer");
 
         EN.put("gui_create_title", "Create Clan");
         EN.put("gui_create_content", "Enter a name and a TAG for your clan.\n\nTAG rules:\n- 3 to 6 characters\n- Letters and digits only\n- No spaces or special characters\n- Must start with an uppercase letter");
@@ -150,6 +167,25 @@ public final class Lang {
         EN.put("gui_chat_hint", "Type your message...");
         EN.put("gui_chat_format", "\u00A76[Clan Chat] \u00A7e[%role%] \u00A7b%player%\u00A7f: %message%");
 
+        EN.put("gui_set_home_title", "Set Clan Home Point");
+        EN.put("gui_set_home_content", "Enter a home point name.\nRules:\n- 1 to 6 symbols\n- First symbol must be uppercase\n- Letters and digits only");
+        EN.put("gui_set_home_input", "Home Point Name");
+        EN.put("gui_set_home_hint", "Example: Home1");
+
+        EN.put("gui_tp_home_title", "Teleport to Home Point");
+        EN.put("gui_tp_home_content", "Select a clan home point from the list.");
+        EN.put("gui_tp_home_confirm_title", "Teleport Confirmation");
+        EN.put("gui_tp_home_confirm_content", "Teleport to \u00A7e%home%\u00A7f?\n\nAfter confirming, teleport starts in 10 seconds.\nDo not move.");
+
+        EN.put("gui_transfer_title", "Transfer Ownership");
+        EN.put("gui_transfer_content", "Select a member who will become the new clan leader.");
+        EN.put("gui_transfer_confirm_title", "Ownership Transfer Confirmation");
+        EN.put("gui_transfer_confirm_content", "Transfer clan ownership to \u00A7e%player%\u00A7f?\n\nYou will become a regular member.");
+
+        EN.put("title_teleport_main", "TELEPORTATION");
+        EN.put("title_teleport_subtitle", "Do not move");
+        EN.put("title_teleport_bar", "Teleporting in %seconds% seconds");
+
         EN.put("gui_delete_title", "Delete Clan");
         EN.put("gui_delete_content", "\u00A7c\u00A7lWARNING!\n\n\u00A7fYou are about to delete the clan:\n\u00A7e%name% \u00A7f[\u00A7b%tag%\u00A7f]\n\n\u00A7cThis action is IRREVERSIBLE!\n\u00A7cAll clan data will be permanently deleted:\n\u00A7c- All members will be removed\n\u00A7c- Treasury will be lost\n\u00A7c- Regions will be unclaimed\n\n\u00A7fAre you sure?");
 
@@ -181,6 +217,12 @@ public final class Lang {
         RU.put("error_economy_disabled", "\u00A7cИнтеграция с экономикой отключена! EconomyAPI не найден.");
         RU.put("error_no_members_kick", "\u00A7cНет участников для исключения!");
         RU.put("error_cannot_invite_self", "\u00A7cВы не можете пригласить себя!");
+        RU.put("error_home_name_invalid", "\u00A7cНеверное имя точки! 1-6 символов, первая буква заглавная, только буквы и цифры.");
+        RU.put("error_home_exists", "\u00A7cТакая точка уже существует!");
+        RU.put("error_no_home_points", "\u00A7cТочки дома клана еще не созданы!");
+        RU.put("error_home_not_found", "\u00A7cТочка дома не найдена.");
+        RU.put("error_teleport_cancelled_moved", "\u00A7cТелепортация отменена, потому что вы сдвинулись.");
+        RU.put("error_transfer_target_invalid", "\u00A7cНет подходящего участника для передачи владения.");
         RU.put("error_failed", "\u00A7cОперация не удалась. Попробуйте снова.");
         RU.put("error_console_only", "Эта команда доступна только в игре.");
 
@@ -196,6 +238,8 @@ public final class Lang {
         RU.put("success_delete_cancelled", "\u00A7aУдаление клана отменено.");
         RU.put("success_deposit", "\u00A7aВы внесли \u00A7e%amount% монет\u00A7a в казну! (Комиссия: \u00A7c%commission%\u00A7a)");
         RU.put("success_withdraw", "\u00A7aВы сняли \u00A7e%amount% монет\u00A7a из казны!");
+        RU.put("success_home_created", "\u00A7aТочка дома \u00A7e%home%\u00A7a создана для клана [\u00A7b%tag%\u00A7a].");
+        RU.put("success_transfer_ownership", "\u00A7aВладение кланом передано игроку \u00A7e%player%\u00A7a.");
 
         RU.put("broadcast_clan_created", "\u00A7aИгрок \u00A7b%player% \u00A7aсоздал клан [\u00A7b%tag%\u00A7a], поздравляем!");
         RU.put("broadcast_member_joined", "\u00A7aНовый участник \u00A7b%player% \u00A7aвступил в наш клан, поздравляем!");
@@ -203,11 +247,15 @@ public final class Lang {
         RU.put("broadcast_clan_deleted", "\u00A7cКлан [\u00A7b%tag%\u00A7c] был расформирован.");
         RU.put("broadcast_deposit", "\u00A7aУчастник \u00A7b%player% \u00A7aпожертвовал \u00A7e%amount% монет\u00A7a в казну клана!");
         RU.put("broadcast_withdraw", "\u00A7cУчастник клана \u00A7b%player%\u00A7c взял \u00A7e%amount% монет\u00A7c из казны клана.");
+        RU.put("broadcast_home_created", "\u00A7aНовая точка дома \u00A7e%home%\u00A7a для [\u00A7b%tag%\u00A7a] создана.");
+        RU.put("broadcast_ownership_transferred", "\u00A7eВладение кланом передано от \u00A7b%from% \u00A7eк \u00A7b%to%\u00A7e.");
 
         RU.put("notify_kicked", "\u00A7cВы были исключены из клана!");
         RU.put("notify_clan_deleted", "\u00A7cВаш клан [\u00A7b%tag%\u00A7c] был удалён лидером.");
         RU.put("notify_invite_declined", "\u00A7e%player% \u00A7cотклонил ваше приглашение.");
         RU.put("notify_processing", "\u00A7eОбработка... Вы получите уведомление по завершении.");
+        RU.put("notify_teleport_started", "\u00A7eПоследовательность телепортации запущена.");
+        RU.put("notify_you_are_new_leader", "\u00A7aТеперь вы лидер клана [\u00A7b%tag%\u00A7a].");
 
         RU.put("gui_main_title", "Панель Клана");
         RU.put("gui_main_content", "ВАЖНАЯ ИНФОРМАЦИЯ!\n\nСоздание клана БЕСПЛАТНО.\nОднако при пополнении казны клана\nбудет взиматься комиссия от 1%% до 10%% от суммы.");
@@ -218,6 +266,9 @@ public final class Lang {
         RU.put("gui_btn_deposit", "Пополнить Казну");
         RU.put("gui_btn_withdraw", "Снять из Казны");
         RU.put("gui_btn_chat", "Клановый Чат");
+        RU.put("gui_btn_set_home", "Установить Точку Дома");
+        RU.put("gui_btn_tp_home", "Телепортироваться на Точку");
+        RU.put("gui_btn_transfer_owner", "Передача Владения");
         RU.put("gui_btn_rename", "Изменить Название");
         RU.put("gui_btn_description", "Добавить Описание");
         RU.put("gui_btn_delete", "Удалить Клан");
@@ -228,6 +279,8 @@ public final class Lang {
         RU.put("gui_btn_cancel", "Отмена");
         RU.put("gui_btn_delete_confirm", "\u00A7cУдалить Клан");
         RU.put("gui_btn_custom_amount", "\u00A7aСвоя Сумма");
+        RU.put("gui_btn_teleport", "Телепортироваться");
+        RU.put("gui_btn_transfer", "Передать");
 
         RU.put("gui_create_title", "Создание Клана");
         RU.put("gui_create_content", "Введите название и TAG для вашего клана.\n\nПравила TAG:\n- От 3 до 6 символов\n- Только буквы и цифры\n- Без пробелов и спецсимволов\n- Начинается с заглавной буквы");
@@ -291,6 +344,25 @@ public final class Lang {
         RU.put("gui_chat_input", "Сообщение");
         RU.put("gui_chat_hint", "Введите сообщение...");
         RU.put("gui_chat_format", "\u00A76[Клан Чат] \u00A7e[%role%] \u00A7b%player%\u00A7f: %message%");
+
+        RU.put("gui_set_home_title", "Установка Точки Дома Клана");
+        RU.put("gui_set_home_content", "Введите имя точки дома.\nПравила:\n- От 1 до 6 символов\n- Первая буква заглавная\n- Только буквы и цифры");
+        RU.put("gui_set_home_input", "Имя Точки Дома");
+        RU.put("gui_set_home_hint", "Пример: Home1");
+
+        RU.put("gui_tp_home_title", "Телепорт на Точку Дома");
+        RU.put("gui_tp_home_content", "Выберите точку дома клана из списка.");
+        RU.put("gui_tp_home_confirm_title", "Подтверждение Телепорта");
+        RU.put("gui_tp_home_confirm_content", "Телепортироваться на \u00A7e%home%\u00A7f?\n\nПосле подтверждения телепорт начнется через 10 секунд.\nНе двигайтесь.");
+
+        RU.put("gui_transfer_title", "Передача Владения");
+        RU.put("gui_transfer_content", "Выберите участника, который станет новым лидером клана.");
+        RU.put("gui_transfer_confirm_title", "Подтверждение Передачи");
+        RU.put("gui_transfer_confirm_content", "Передать владение кланом игроку \u00A7e%player%\u00A7f?\n\nВы станете обычным участником.");
+
+        RU.put("title_teleport_main", "ТЕЛЕПОРТАЦИЯ");
+        RU.put("title_teleport_subtitle", "Не двигайтесь");
+        RU.put("title_teleport_bar", "Телепортация через %seconds% секунд");
 
         RU.put("gui_delete_title", "Удалить Клан");
         RU.put("gui_delete_content", "\u00A7c\u00A7lВНИМАНИЕ!\n\n\u00A7fВы собираетесь удалить клан:\n\u00A7e%name% \u00A7f[\u00A7b%tag%\u00A7f]\n\n\u00A7cЭто действие НЕОБРАТИМО!\n\u00A7cВсе данные клана будут удалены:\n\u00A7c- Все участники будут удалены\n\u00A7c- Казна будет потеряна\n\u00A7c- Регионы будут сняты\n\n\u00A7fВы уверены?");

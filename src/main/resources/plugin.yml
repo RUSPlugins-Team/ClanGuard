@@ -1,6 +1,6 @@
 name: ClanGuard
 main: en.clangurd.ClanGuard
-version: 1.0.0
+version: 1.0.1
 api: ["1.0.0"]
 author: RUSPlugins-Team
 website: https://github.com/RUSPlugins-Team

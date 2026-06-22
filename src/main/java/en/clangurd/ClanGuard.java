@@ -1,6 +1,7 @@
 package en.clangurd;
 
 import cn.nukkit.plugin.PluginBase;
+import en.clangurd.clandata.ClanManager;
 import en.clangurd.command.ClanCommand;
 import en.clangurd.lang.Lang;
 import en.clangurd.listener.FormListener;
@@ -14,10 +15,12 @@ public final class ClanGuard extends PluginBase {
     public void onEnable() {
         instance = this;
         Lang.init();
+        saveResource("database.json", false);
+        ClanManager.init(this);
         checkEconomy();
         getServer().getCommandMap().register("clanguard", new ClanCommand());
         getServer().getPluginManager().registerEvents(new FormListener(this), this);
-        getLogger().info("ClanGuard version 1.0.0 powered by RUSPlugins-Team (Nukkit Plugin)");
+        getLogger().info("ClanGuard version 1.0.1 powered by RUSPlugins-Team (Nukkit Plugin)");
     }
 
     @Override
