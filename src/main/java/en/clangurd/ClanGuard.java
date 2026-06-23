@@ -20,7 +20,7 @@ public final class ClanGuard extends PluginBase {
         checkEconomy();
         getServer().getCommandMap().register("clanguard", new ClanCommand());
         getServer().getPluginManager().registerEvents(new FormListener(this), this);
-        getLogger().info("ClanGuard version 1.0.1 powered by RUSPlugins-Team (Nukkit Plugin)");
+        getLogger().info("ClanGuard version 1.0.3 powered by RUSPlugins-Team (Nukkit Plugin)");
     }
 
     @Override

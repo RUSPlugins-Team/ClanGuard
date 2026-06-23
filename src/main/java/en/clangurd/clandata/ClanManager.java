@@ -33,6 +33,12 @@ public final class ClanManager {
     private static final int MAX_PLAYERS = 150;
     private static final SecureRandom RANDOM = new SecureRandom();
     private static final String ID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String[] RANKS = {
+            "Novice", "Initiate", "Pathfinder", "Vanguard", "Raider",
+            "Guardian", "Sentinel", "Elite", "Commander", "Strategist",
+            "Warlord", "Conqueror", "Champion", "Overlord", "Mythic",
+            "Ascendant", "Sovereign", "Legend", "Immortal", "Eternal"
+    };
 
     private static final Map<String, String[]> pendingInvites = new HashMap<>();
     private static final Map<String, String[]> lastChatMessages = new HashMap<>();
@@ -375,7 +381,7 @@ public final class ClanManager {
     public static boolean tagExists(String tag) {
         for (String clan : listClans()) {
             String info = readStorageFile(clan, "infoclan.db");
-            if (info != null && info.contains("\"tag\":\"" + tag + "\"")) {
+            if (info != null && (info.contains("\"tag\":\"" + tag + "\"") || info.contains("\"tag\": \"" + tag + "\""))) {
                 return true;
             }
         }
@@ -423,15 +429,25 @@ public final class ClanManager {
         }
 
         Map<String, Object> info = new HashMap<>();
+        int level = extractIntValueOrDefault(infoContent, "level", 1);
+        long clanExp = extractLongValue(infoContent, "clanExp");
+        String levelView = level >= 99 && clanExp > 9900 ? "99+" : String.valueOf(level);
+        String rank = extractValueOrDefault(infoContent, "rank", getRankByLevel(level));
+        String title = extractValueOrDefault(infoContent, "title", getTitleByTasks(
+                extractLongValue(infoContent, "tasksInvites"),
+                extractLongValue(infoContent, "tasksDeposits"),
+                extractLongValue(infoContent, "tasksMessages"),
+                extractLongValue(infoContent, "tasksHomes")
+        ));
         info.put("name", extractValue(infoContent, "name"));
         info.put("tag", extractValue(infoContent, "tag"));
         info.put("leader", extractValue(infoContent, "leader"));
         info.put("createdAt", extractValue(infoContent, "createdAt"));
         info.put("treasury", extractLongValue(infoContent, "treasury"));
-        info.put("level", extractIntValue(infoContent, "level"));
+        info.put("level", levelView);
         info.put("description", extractValueOrDefault(infoContent, "description", "No description"));
-        info.put("rank", extractValueOrDefault(infoContent, "rank", "None"));
-        info.put("title", extractValueOrDefault(infoContent, "title", "None"));
+        info.put("rank", rank);
+        info.put("title", title);
         info.put("regions", extractIntValueOrDefault(infoContent, "regions", 0));
         info.put("homePoints", getHomePointsSummary(clanName));
         info.put("wins", extractIntValueOrDefault(infoContent, "wins", 0));
@@ -464,6 +480,7 @@ public final class ClanManager {
         long depositAmount = amount - commissionAmount;
         long newTreasury = currentTreasury + depositAmount;
         info = info.replaceAll("\"treasury\": \\d+", "\"treasury\": " + newTreasury);
+        info = applyClanProgress(info, (int) Math.min(120, Math.max(10, amount / 10000)), 0, 1, 0, 0);
         return writeStorageFile(clanName, "infoclan.db", info);
     }
 
@@ -510,6 +527,11 @@ public final class ClanManager {
         boolean ok = writeStorageFile(clanName, "homes.db", newContent);
         if (ok) {
             updateHomePointsField(clanName);
+            String info = readStorageFile(clanName, "infoclan.db");
+            if (info != null) {
+                info = applyClanProgress(info, 40, 0, 0, 0, 1);
+                writeStorageFile(clanName, "infoclan.db", info);
+            }
         }
         return ok;
     }
@@ -649,6 +671,12 @@ public final class ClanManager {
             }
         }
         setLastChatMessage(clanName, formattedRole, senderName, message);
+
+        String info = readStorageFile(clanName, "infoclan.db");
+        if (info != null) {
+            info = applyClanProgress(info, 2, 0, 0, 1, 0);
+            writeStorageFile(clanName, "infoclan.db", info);
+        }
     }
 
     public static boolean deleteClan(String clanName) {
@@ -718,7 +746,15 @@ public final class ClanManager {
         int arrayCloseIndex = content.lastIndexOf("]");
         content = content.substring(0, arrayCloseIndex - 1) + newMember + "\n  ]\n}";
         content = content.replace("\"count\": " + count, "\"count\": " + (count + 1));
-        return writeStorageFile(clanName, "players.db", content);
+        boolean ok = writeStorageFile(clanName, "players.db", content);
+        if (ok) {
+            String info = readStorageFile(clanName, "infoclan.db");
+            if (info != null) {
+                info = applyClanProgress(info, 30, 1, 0, 0, 0);
+                writeStorageFile(clanName, "infoclan.db", info);
+            }
+        }
+        return ok;
     }
 
     public static boolean kickMemberFromClan(String clanName, String playerName) {
@@ -802,7 +838,7 @@ public final class ClanManager {
         String createdDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
         String idJson = "{\n  \"clanId\": \"" + clanId + "\",\n  \"creator\": {\n    \"ip\": \"" + creatorIp + "\",\n    \"nick\": \"" + creatorNick + "\",\n    \"pid\": \"" + creatorPid + "\"\n  }\n}";
-        String infoClan = "{\n  \"name\": \"" + clanName + "\",\n  \"tag\": \"" + clanTag + "\",\n  \"leader\": \"" + creatorNick + "\",\n  \"createdAt\": \"" + createdDate + "\",\n  \"treasury\": 0,\n  \"level\": 1,\n  \"rank\": \"None\",\n  \"title\": \"None\",\n  \"regions\": 0,\n  \"homePoints\": \"None\",\n  \"wins\": 0,\n  \"losses\": 0,\n  \"deaths\": 0\n}";
+        String infoClan = "{\n  \"name\": \"" + clanName + "\",\n  \"tag\": \"" + clanTag + "\",\n  \"leader\": \"" + creatorNick + "\",\n  \"createdAt\": \"" + createdDate + "\",\n  \"treasury\": 0,\n  \"level\": 1,\n  \"clanExp\": 0,\n  \"rank\": \"Novice\",\n  \"title\": \"First Steps\",\n  \"tasksInvites\": 0,\n  \"tasksDeposits\": 0,\n  \"tasksMessages\": 0,\n  \"tasksHomes\": 0,\n  \"regions\": 0,\n  \"homePoints\": \"None\",\n  \"wins\": 0,\n  \"losses\": 0,\n  \"deaths\": 0\n}";
         String playersDb = "{\n  \"maxPlayers\": " + MAX_PLAYERS + ",\n  \"count\": 1,\n  \"members\": [\n    {\n      \"nick\": \"" + creatorNick + "\",\n      \"pid\": \"" + creatorPid + "\",\n      \"role\": \"leader\",\n      \"joinedAt\": \"" + createdDate + "\"\n    }\n  ]\n}";
 
         boolean ok = writeStorageFile(clanName, "id.json", idJson)
@@ -881,5 +917,86 @@ public final class ClanManager {
             return defaultValue;
         }
         return extractIntValue(content, key);
+    }
+
+    private static String applyClanProgress(String infoContent, int expGain, int invites, int deposits, int messages, int homes) {
+        long clanExp = extractLongValue(infoContent, "clanExp");
+        if (!infoContent.contains("\"clanExp\":")) {
+            int currentLevel = extractIntValueOrDefault(infoContent, "level", 1);
+            clanExp = Math.max(0, (currentLevel - 1) * 100L);
+        }
+
+        long tasksInvites = extractLongValue(infoContent, "tasksInvites");
+        long tasksDeposits = extractLongValue(infoContent, "tasksDeposits");
+        long tasksMessages = extractLongValue(infoContent, "tasksMessages");
+        long tasksHomes = extractLongValue(infoContent, "tasksHomes");
+
+        clanExp += Math.max(0, expGain);
+        tasksInvites += Math.max(0, invites);
+        tasksDeposits += Math.max(0, deposits);
+        tasksMessages += Math.max(0, messages);
+        tasksHomes += Math.max(0, homes);
+
+        int level = Math.min(99, (int) (1 + (clanExp / 100L)));
+        String rank = getRankByLevel(level);
+        String title = getTitleByTasks(tasksInvites, tasksDeposits, tasksMessages, tasksHomes);
+
+        infoContent = setNumericField(infoContent, "clanExp", clanExp);
+        infoContent = setNumericField(infoContent, "level", level);
+        infoContent = setStringField(infoContent, "rank", rank);
+        infoContent = setStringField(infoContent, "title", title);
+        infoContent = setNumericField(infoContent, "tasksInvites", tasksInvites);
+        infoContent = setNumericField(infoContent, "tasksDeposits", tasksDeposits);
+        infoContent = setNumericField(infoContent, "tasksMessages", tasksMessages);
+        infoContent = setNumericField(infoContent, "tasksHomes", tasksHomes);
+        return infoContent;
+    }
+
+    private static String getRankByLevel(int level) {
+        int safeLevel = Math.max(1, Math.min(99, level));
+        int index = Math.min(RANKS.length - 1, (safeLevel - 1) / 5);
+        return RANKS[index];
+    }
+
+    private static String getTitleByTasks(long invites, long deposits, long messages, long homes) {
+        String title = "First Steps";
+        if (invites >= 5) {
+            title = "Recruiter";
+        }
+        if (homes >= 3) {
+            title = "Architect";
+        }
+        if (deposits >= 10) {
+            title = "Treasurer";
+        }
+        if (messages >= 50) {
+            title = "Voice of Clan";
+        }
+        if (invites >= 15 && deposits >= 20 && messages >= 120 && homes >= 5) {
+            title = "Clan Mentor";
+        }
+        if (invites >= 30 && deposits >= 40 && messages >= 250 && homes >= 8) {
+            title = "Legacy Builder";
+        }
+        return title;
+    }
+
+    private static String setNumericField(String content, String key, long value) {
+        String marker = "\"" + key + "\":";
+        String formatted = "\"" + key + "\": " + value;
+        if (content.contains(marker)) {
+            return content.replaceAll("\"" + key + "\":\\s*-?\\d+", formatted);
+        }
+        return content.replace("\n}", ",\n  " + formatted + "\n}");
+    }
+
+    private static String setStringField(String content, String key, String value) {
+        String marker = "\"" + key + "\":";
+        String safe = value.replace("\"", "");
+        String formatted = "\"" + key + "\": \"" + safe + "\"";
+        if (content.contains(marker)) {
+            return content.replaceAll("\"" + key + "\":\\s*\"[^\"]*\"", formatted);
+        }
+        return content.replace("\n}", ",\n  " + formatted + "\n}");
     }
 }
