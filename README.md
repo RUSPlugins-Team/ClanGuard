@@ -1,4 +1,3 @@
-![](https://github-visitor-counter-tau.vercel.app/api?username=RUSPLugins-Team&repo=ClanGuard&displayMode=topCountries&theme=transparent&columns=3&maxflags=38&showlabels=true&visitortype=percentage&size=large)
 
 # 🛡️ ClanGuard
 
